@@ -1,73 +1,103 @@
-# .
+# 🏇 Horse Racing Simulator
 
-This template should help get you started developing with Vue 3 in Vite.
+A high-performance, real-time horse racing simulation built with **Vue 3**, **TypeScript**, and **Vuex**. This project features a procedural race engine, dynamic scheduling, and a responsive interface designed for both desktop and mobile enthusiasts.
 
-## Recommended IDE Setup
+---
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## 🚀 Key Features
 
-## Recommended Browser Setup
+-   **Procedural Horse Generation**: Automatically creates a pool of 20 unique horses with randomized "condition" levels that directly impact their performance.
+-   **Dynamic Race Program**: Generates a 6-round schedule with distances ranging from 1200m to 2200m.
+-   **Real-time Simulation Engine**: Uses `requestAnimationFrame` for buttery-smooth 60fps animations, featuring realistic speed variations and finish-line photo detection.
+-   **Persistent Tracking**: A robust Vuex-driven state machine tracks every race, ranking, and cumulative result across the entire program.
+-   **Responsive Layout**: A modern "Dashboard" style UI with collapsible sidebars and mobile-first containerization.
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## 🛠 Technical Stack
 
-## Type Support for `.vue` Imports in TS
+-   **Framework**: [Vue 3](https://vuejs.org/) (Composition API + `<script setup>`)
+-   **Build Tool**: [Vite](https://vitejs.dev/)
+-   **Language**: [TypeScript](https://www.typescriptlang.org/) (Strict Mode)
+-   **State Management**: [Vuex 4](https://vuex.vuejs.org/)
+-   **Testing**: [Vitest](https://vitest.dev/) (Unit) & [Playwright](https://playwright.dev/) (E2E)
+-   **Styling**: Vanilla CSS (Scoped)
+-   **Deployment**: [Docker](https://www.docker.com/) + Nginx (Multi-stage build)
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+---
 
-## Customize configuration
+## 🚦 Getting Started
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### Prerequisites
+-   Node.js (v24 or higher recommended)
+-   npm
 
-## Project Setup
+### Installation
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/your-username/horse-racing.git
+    cd horse-racing
+    ```
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
 
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
+### Development
+Start the Vite development server:
+```bash
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
-
-```sh
+### Production Build
+Generate optimized static assets:
+```bash
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+---
 
-```sh
-npm run test:unit
-```
+## 🐳 Docker Deployment
 
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
+The application is containerized for production-grade reliability using a multi-stage Docker build.
 
-```sh
-# Install browsers for the first run
-npx playwright install
+1.  **Build and Run with Compose**:
+    ```bash
+    docker compose up -d --build
+    ```
+2.  **Access the App**:
+    Navigate to `http://localhost:8080` in your browser.
 
-# When testing on CI, must build the project first
-npm run build
+---
 
-# Runs the end-to-end tests
-npm run test:e2e
-# Runs the tests only on Chromium
-npm run test:e2e -- --project=chromium
-# Runs the tests of a specific file
-npm run test:e2e -- tests/example.spec.ts
-# Runs the tests in debug mode
-npm run test:e2e -- --debug
-```
+## 🧪 Testing & Quality
 
-### Lint with [ESLint](https://eslint.org/)
+We maintain high standards through automated testing and strict type checking.
 
-```sh
-npm run lint
-```
+-   **Unit Tests**: Verify store logic and component lifecycles.
+    ```bash
+    npm run test:unit
+    ```
+-   **E2E Tests**: Validate full user flows (program generation -> race completion).
+    ```bash
+    npx playwright install
+    npm run test:e2e
+    ```
+-   **Type Check**:
+    ```bash
+    npm run type-check
+    ```
+
+---
+
+## 📐 Architecture Overview
+
+### Simulation Logic
+The race logic is decoupled from the UI. Horses calculate their movement based on their intrinsic `condition` property combined with a "Current Round" multiplier and a per-frame random variation factor. This ensures that while condition matters, every race is unpredictable.
+
+### State Management
+The project follows a "Single Source of Truth" pattern using Vuex.
+-   **State**: Stores the horse pool, round schedule, current race status, and historical rankings.
+-   **Mutations/Actions**: Deterministic transitions for generating data, starting/pausing races, and logging results.
+
+### Design Patterns
+-   **Container/Presentational**: `HomeView` manages the layout and high-level data flow, while components like `RaceHorse` and `HorseList` focus on visual representation.
+-   **Watcher-driven Animations**: The `RaceTrack` synchronizes its internal animation loop with the global `isRaceStarted` state via reactive watchers.
